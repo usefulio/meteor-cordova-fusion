@@ -32,8 +32,8 @@ Edit your cordova "www/index.html"
 	<html>
     	<head>
         	<title>Hello World</title>
-			<script type="text/javascript" charset="utf-8" src="js/meteor-cordova-fusion.js"></script>
 			<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+			<script type="text/javascript" charset="utf-8" src="js/meteor-cordova-fusion.js"></script>
     	</head>
 		<body onload="onLoad()">
 			<script>
@@ -53,7 +53,7 @@ Edit your cordova "www/index.html"
 
 Change variable `applicationURL` to your meteor application URL (e.g. `your_app.meteor.com`)
 
-Build and run your cordova project while device is online. Now turn off your device internet connection and start application - voilla: It works!
+Build and run your cordova project while device is online. Now turn off your device internet connection and start application again - voilla: It works!
 
 How it works?
 -------------
