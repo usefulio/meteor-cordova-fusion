@@ -45,7 +45,7 @@ Edit your cordova "www/index.html"
 				}
 
 				function onDeviceReady() {
-					startFusion(applicationURL);
+					startFusion(applicationURL, true);
 				}
 			</script>
 		</body>
@@ -67,6 +67,21 @@ When you start application in your mobile device, onDeviceReady event will execu
 Fusion script will load your meteor application files. They are cached, so will be loaded from HTML5 appcache.
 
 If you change your meteor application at server, your fusion script will change, and next execution when device is online will fetch new fusion script (and new meteor app files) from server.
+
+appcache size limit
+-------------------
+
+Different browsers have differend appcache size limits. 
+My experience with cordova 3 & android 4.2: Test application is working normally if deployed to server but doesn't work in devel mode. Why?
+Appcache size limit is 5MB in webview: my test application when deployed is 4.8 MB but in devel mode is 6.04 MB.
+
+I also made solution which uses localStorage to store application files (instead of appcache) but I have the same problem: localStorage size limit is 5 MB too.
+
+**To use fusion without appcache:**
+
+Remove `appcache` package from your meteor application and call `startFusion` function with second parameter set to `false`:
+
+	startFusion(applicationURL, true);
 
 
 That's it :)
