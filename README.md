@@ -81,7 +81,7 @@ I also made solution which uses localStorage to store application files (instead
 
 Remove `appcache` package from your meteor application and call `startFusion` function with second parameter set to `false`:
 
-	startFusion(applicationURL, true);
+	startFusion(applicationURL, false);
 
 
 That's it :)
