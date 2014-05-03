@@ -2,21 +2,30 @@
 <html>
     <head>
         <title>Hello World</title>
+
 		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 		<script type="text/javascript" charset="utf-8" src="js/meteor-cordova-fusion.js"></script>
-    </head>
-	<body onload="onLoad()">
+<!--
+		<script type="text/javascript">
+			window.onerror=function(msg, url, linenumber) {
+				alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
+				return true;
+			}
+		</script>
+-->
 		<script>
 			// change this - put your application URL
-			var applicationURL = "http://famous-experiment1.meteor.com";
+			var applicationURL = "http://192.168.1.159:3000";
 
 			function onLoad() {
 				document.addEventListener("deviceready", onDeviceReady, false);
 			}
 
 			function onDeviceReady() {
-				startFusion(applicationURL);
+				startFusion(applicationURL, true);
 			}
 		</script>
+    </head>
+	<body onload="onLoad()">
 	</body>
 </html>
