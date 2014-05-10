@@ -30,24 +30,25 @@ Edit your cordova "www/index.html"
 
 	<!DOCTYPE html>
 	<html>
-    	<head>
-        	<title>Hello World</title>
+	    <head>
+	        <title>Hello World</title>
 			<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 			<script type="text/javascript" charset="utf-8" src="js/meteor-cordova-fusion.js"></script>
-    	</head>
-		<body onload="onLoad()">
+
 			<script>
 				// change this - put your application URL
 				var applicationURL = "http://famous-experiment1.meteor.com";
-
 				function onLoad() {
 					document.addEventListener("deviceready", onDeviceReady, false);
 				}
 
 				function onDeviceReady() {
-					startFusion(applicationURL, true);
+					startFusion(applicationURL, FUSION);
 				}
 			</script>
+
+	    </head>
+		<body onload="onLoad()">
 		</body>
 	</html>
 
@@ -75,13 +76,7 @@ Different browsers have differend appcache size limits.
 My experience with cordova 3 & android 4.2: Test application is working normally if deployed to server but doesn't work in devel mode. Why?
 Appcache size limit is 5MB in webview: my test application when deployed is 4.8 MB but in devel mode is 6.04 MB.
 
-I also made solution which uses localStorage to store application files (instead of appcache) but I have the same problem: localStorage size limit is 5 MB too.
-
-**To use fusion without appcache:**
-
-Remove `appcache` package from your meteor application and call `startFusion` function with second parameter set to `false`:
-
-	startFusion(applicationURL, false);
+I also tried solution which uses localStorage to store application files (instead of appcache) but I have the same problem: localStorage size limit is 5 MB too :(
 
 
 That's it :)
