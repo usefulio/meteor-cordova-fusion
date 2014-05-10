@@ -30,24 +30,25 @@ Edit your cordova "www/index.html"
 
 	<!DOCTYPE html>
 	<html>
-    	<head>
-        	<title>Hello World</title>
+	    <head>
+	        <title>Hello World</title>
 			<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 			<script type="text/javascript" charset="utf-8" src="js/meteor-cordova-fusion.js"></script>
-    	</head>
-		<body onload="onLoad()">
+
 			<script>
 				// change this - put your application URL
 				var applicationURL = "http://famous-experiment1.meteor.com";
-
 				function onLoad() {
 					document.addEventListener("deviceready", onDeviceReady, false);
 				}
 
 				function onDeviceReady() {
-					startFusion(applicationURL, true);
+					startFusion(applicationURL, FUSION);
 				}
 			</script>
+
+	    </head>
+		<body onload="onLoad()">
 		</body>
 	</html>
 
