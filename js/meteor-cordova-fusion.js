@@ -1,73 +1,65 @@
-// this function requires: cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-network-information.git
+FUSION         = 0;
+FUSION_CORDOVA = 1;
+
+// This function requires network information plugin in your cordova project: 
+//   cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-network-information.git
+//
 function hasNetworkConnection() {
-    return navigator.connection.type != Connection.NONE;
+	if(navigator && navigator.connection) {
+		// under cordova
+		return navigator.connection.type != Connection.NONE;
+	} else {
+		// without cordova (?)
+		return true;
+	}
 }
 
 function runScript(scriptSource) {
-	var s = document.createElement('script');
-	s.type = "text/javascript";
-	s.innerHTML = scriptSource;
-	document.head.appendChild(s);
+	var script = document.createElement('script');
+	script.type = "text/javascript";
+	script.text = scriptSource;
+	var head = document.getElementsByTagName('head')[0];
+	head.appendChild(script);
 }
 
-function loadScriptFromURL(scriptURL, successCallback, errorCallback) {
+function loadScriptFromURL(scriptURL, scriptName, candidate) {
 	var request = new XMLHttpRequest();
-
-	request.onload = function() {
-		if(request.readyState === 4) {
-			if(request.status === 200) {
-				successCallback(request.responseText);
-			} else {
-				errorCallback(request.statusText);
-			}
+	request.open('GET', scriptURL, false);
+	request.send(null);
+	if (request.status === 200) {
+		scriptSource = request.responseText;
+		window.localStorage.setItem(scriptName, scriptSource);
+		runScript(scriptSource);
+	} else {
+		if(candidate) {
+			console.log('Error ' + request.status + ' ' + request.statusText);
+			runScript(candidate);
 		}
 	}
-
-	request.onerror = function() {
-		errorCallback(request.statusText || "Unknown error.");
-	}
-
-	request.open("GET", scriptURL, true);
-	request.send(null);
 }
 
 function loadScript(scriptURL, scriptName) {
 	var scriptSource = window.localStorage.getItem(scriptName);
-
-	function successCallback(data) {
-		scriptSource = data;
-		window.localStorage.setItem(scriptName, scriptSource);
-		runScript(scriptSource);
-	}
-
-	function errorCallback(message) {
-		if(scriptSource) {
-			runScript(scriptSource);
-		} else {
-			console.log(message);
-		}
-	}
-
 	if(!scriptSource || hasNetworkConnection()) {
-		loadScriptFromURL(scriptURL, successCallback, errorCallback);		
-	}
-	else
-	{
+		loadScriptFromURL(scriptURL, scriptName, scriptSource);
+	} else {
 		runScript(scriptSource);
 	}
 }
 
-startFusion = function(appURL, usingAppCache) {
+startFusion = function(appURL, fusionMethod) {
 	var url = appURL;
 	if(url.charAt(url.length - 1) != '/') {
 		url = url + "/";
 	}
 
-	if(typeof(usingAppCache) == 'undefined' || usingAppCache) {
+	if(typeof(fusionMethod) == 'undefined' || fusionMethod == FUSION) {
 		url = url + "fusion";
 		loadScript(url, "fusion");
-	} else {
-		url = url + "fusion-no-appcache";
-		loadScript(url, "fusion_no_appcache");
+	}
+
+	if(fusionMethod == FUSION_CORDOVA) {
+		url = url + "fusion-cordova";
+		loadScript(url, "fusion_cordova");
 	}
 }

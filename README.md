@@ -75,13 +75,7 @@ Different browsers have differend appcache size limits.
 My experience with cordova 3 & android 4.2: Test application is working normally if deployed to server but doesn't work in devel mode. Why?
 Appcache size limit is 5MB in webview: my test application when deployed is 4.8 MB but in devel mode is 6.04 MB.
 
-I also made solution which uses localStorage to store application files (instead of appcache) but I have the same problem: localStorage size limit is 5 MB too.
-
-**To use fusion without appcache:**
-
-Remove `appcache` package from your meteor application and call `startFusion` function with second parameter set to `false`:
-
-	startFusion(applicationURL, false);
+I also tried solution which uses localStorage to store application files (instead of appcache) but I have the same problem: localStorage size limit is 5 MB too :(
 
 
 That's it :)
