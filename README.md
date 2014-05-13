@@ -20,10 +20,6 @@ Deploy your application somewhere, for example:
 
 	meteor deploy your_app.meteor.com
 
-In your cordova project add network information plugin:
-
-	cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-network-information.git
-
 Add "meteor-cordova-fusion.js" to your cordova project (usually to "www/js/" directory)
 
 Edit your cordova "www/index.html"
@@ -32,34 +28,30 @@ Edit your cordova "www/index.html"
 	<html>
 	    <head>
 	        <title>Hello World</title>
-			<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
 			<script type="text/javascript" charset="utf-8" src="js/meteor-cordova-fusion.js"></script>
 
 			<script>
 				// change this - put your application URL
-				var applicationURL = "http://famous-experiment1.meteor.com";
-				function onLoad() {
-					document.addEventListener("deviceready", onDeviceReady, false);
-				}
-
-				function onDeviceReady() {
-					startFusion(applicationURL, FUSION);
-				}
+				startFusion("http://192.168.1.159:3000");
 			</script>
 
 	    </head>
-		<body onload="onLoad()">
+
+		<body>
+			<p>Loading, please wait...</p>
 		</body>
 	</html>
 
-Change variable `applicationURL` to your meteor application URL (e.g. `your_app.meteor.com`)
+
+Change your meteor application URL (e.g. `your_app.meteor.com`)
 
 Build and run your cordova project while device is online. Now turn off your device internet connection and start application again - voilà: It works!
 
 How it works?
 -------------
 
-When you start application in your mobile device, onDeviceReady event will execute startFusion function. It checks if device is online and: 
+When you start application in your mobile device, startFusion fires and:
 
 - If device is online: fusion script is loaded from server, stored into localStorage and executed.
 
@@ -69,14 +61,19 @@ Fusion script will load your meteor application files. They are cached, so will 
 
 If you change your meteor application at server, your fusion script will change, and next execution when device is online will fetch new fusion script (and new meteor app files) from server.
 
-appcache size limit
--------------------
 
-Different browsers have differend appcache size limits. 
-My experience with cordova 3 & android 4.2: Test application is working normally if deployed to server but doesn't work in devel mode. Why?
-Appcache size limit is 5MB in webview: my test application when deployed is 4.8 MB but in devel mode is 6.04 MB.
+Device Ready?
+-------------
 
-I also tried solution which uses localStorage to store application files (instead of appcache) but I have the same problem: localStorage size limit is 5 MB too :(
+Note that meteor is loaded before cordova js API. When cordova "deviceready" event fires, meteor session variable "DEVICE_READY" will be set to true. 
+You should check if DEVICE_READY is set to true before you start using any of cordova API calls in your meteor application.
 
+Also, you can do:
+
+	Deps.autorun(function() {
+		if(Session.get("DEVICE_READY")) {
+			// do something when device is ready (when cordova API is loaded and initialized)
+		}
+	});
 
 That's it :)
